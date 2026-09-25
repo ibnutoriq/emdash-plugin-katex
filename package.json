@@ -1,0 +1,36 @@
+{
+  "name": "emdash-plugin-katex",
+  "version": "0.1.0",
+  "description": "Math (LaTeX) blocks for EmDash CMS, rendered with KaTeX on the server.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Ibnu Toriq",
+  "repository": { "type": "git", "url": "git+https://github.com/ibnutoriq/emdash-plugin-katex.git" },
+  "homepage": "https://github.com/ibnutoriq/emdash-plugin-katex#readme",
+  "bugs": "https://github.com/ibnutoriq/emdash-plugin-katex/issues",
+  "keywords": ["emdash", "emdash-plugin", "math", "latex", "katex", "formula", "equation", "mathematics"],
+  "main": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
+  "exports": {
+    ".": { "types": "./dist/index.d.mts", "import": "./dist/index.mjs" },
+    "./astro": "./src/astro/index.ts",
+    "./admin": "./src/admin.ts"
+  },
+  "files": ["dist", "src"],
+  "scripts": {
+    "build": "tsdown src/index.ts --format esm --dts --clean",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "prepublishOnly": "npm run typecheck && npm test && npm run build"
+  },
+  "peerDependencies": { "emdash": "^0.39.1" },
+  "dependencies": { "katex": "0.18.9" },
+  "devDependencies": {
+    "astro": "^7.3.2",
+    "emdash": "0.39.1",
+    "happy-dom": "^20.14.5",
+    "tsdown": "^0.23.0",
+    "typescript": "^5.9.0",
+    "vitest": "^3.2.7"
+  }
+}
