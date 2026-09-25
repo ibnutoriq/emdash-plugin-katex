@@ -16,7 +16,7 @@
     "./astro": "./src/astro/index.ts",
     "./admin": "./src/admin.ts"
   },
-  "files": ["dist", "src"],
+  "files": ["dist", "src", "CHANGELOG.md"],
   "scripts": {
     "build": "tsdown src/index.ts --format esm --dts --clean",
     "typecheck": "tsc --noEmit",
