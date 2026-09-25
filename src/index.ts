@@ -1,8 +1,10 @@
 import type { PluginDescriptor, PortableTextBlockConfig } from "emdash";
 import { definePlugin } from "emdash";
+import { publishRejection } from "./validate";
 
 export { readMathBlock, type MathBlockValue } from "./block";
 export { mathBlockToMarkdown } from "./markdown";
+export { findMathErrors, publishRejection, type MathError } from "./validate";
 
 const ID = "plugin-katex";
 const VERSION = "0.1.0";
@@ -42,11 +44,17 @@ export const MATH_BLOCK: PortableTextBlockConfig = {
   ],
 };
 
-/** Runtime: the Math block in the editor's slash menu. */
-export function createPlugin(_options: KatexPluginOptions = {}) {
+/** Runtime: the Math block in the editor's slash menu, and (by default) a check before publishing or scheduling. */
+export function createPlugin(options: KatexPluginOptions = {}) {
+  const validate = options.validate !== "off";
+  const check = async (event: { content: Record<string, unknown> }) =>
+    publishRejection(event.content, { inlineText: options.validateInlineText === true });
   return definePlugin({
     id: ID,
     version: VERSION,
+    // Drafts always save (autosave never loses work); publishing and scheduling wait until every formula renders.
+    capabilities: validate ? ["hooks.content-policy:register"] : [],
+    hooks: validate ? { "content:beforePublish": check, "content:beforeSchedule": check } : {},
     admin: { portableTextBlocks: [MATH_BLOCK] },
   });
 }

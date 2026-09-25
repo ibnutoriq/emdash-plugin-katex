@@ -39,3 +39,27 @@ describe("createPlugin (runtime)", () => {
     ]);
   });
 });
+
+describe("createPlugin validation hooks", () => {
+  const event = (content: unknown[]) => ({ content: { data: { content } }, collection: "posts", origin: { source: "api" as const } });
+  const broken = [{ _type: "math", _key: "m", latex: "\\fracc", display: true }];
+
+  it("checks publishing and scheduling by default", async () => {
+    const plugin = createPlugin();
+    expect(plugin.capabilities).toContain("hooks.content-policy:register");
+    const publish = plugin.hooks["content:beforePublish"];
+    expect(plugin.hooks["content:beforeSchedule"]?.handler).toBe(publish?.handler);
+    expect(await publish?.handler(event(broken), {} as never)).toMatchObject({ cancel: true });
+    expect(await publish?.handler(event([{ _type: "math", _key: "m", latex: "x", display: true }]), {} as never)).toBeUndefined();
+  });
+  it("registers nothing when validate is off", () => {
+    const plugin = createPlugin({ validate: "off" });
+    expect(plugin.hooks["content:beforePublish"]).toBeUndefined();
+    expect(plugin.capabilities).not.toContain("hooks.content-policy:register");
+  });
+  it("passes validateInlineText to the check", async () => {
+    const withText = [{ _type: "block", _key: "b", style: "normal", markDefs: [], children: [{ _type: "span", _key: "s", text: "$\\fracc$", marks: [] }] }];
+    expect(await createPlugin().hooks["content:beforePublish"]?.handler(event(withText), {} as never)).toBeUndefined();
+    expect(await createPlugin({ validateInlineText: true }).hooks["content:beforePublish"]?.handler(event(withText), {} as never)).toMatchObject({ cancel: true });
+  });
+});
