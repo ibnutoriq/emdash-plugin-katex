@@ -15,6 +15,8 @@ npm install emdash-plugin-katex
 
 ```js
 // astro.config.mjs
+import { defineConfig } from "astro/config";
+import emdash from "emdash/astro";
 import { katexPlugin } from "emdash-plugin-katex";
 
 export default defineConfig({
@@ -71,7 +73,7 @@ EmDash does not yet offer an API for custom plugin block views. The preview deco
 
 ## Performance
 
-KaTeX adds about 115 KiB (gzip) to the server bundle. Rendering is fast (hundreds of formulas in well under a second) and cached pages are not re-rendered.
+Rendering is fast: hundreds of formulas take well under a second, and cached pages are not re-rendered. KaTeX runs on the server, so on adapters that bundle dependencies it adds to the server bundle (on one Cloudflare Workers site it added about 115 KiB gzip to the Worker upload); the Node adapter loads it from `node_modules` at runtime.
 
 ## Limitations
 

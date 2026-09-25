@@ -59,6 +59,8 @@ let queued = false;
 /** Decorates every Math card on the page; safe to call repeatedly. */
 export function scan(): void {
   queued = false;
+  // No DOM: server rendering, or a pending timer that fires after the page is gone.
+  if (typeof document === "undefined") return;
   for (const editor of document.querySelectorAll<EditorElement>(".ProseMirror")) {
     // Toggling "display" changes the block's data without changing the card's DOM, so editor
     // transactions trigger a rescan as well.
