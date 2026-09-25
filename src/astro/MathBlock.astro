@@ -1,0 +1,17 @@
+---
+// Server-rendered Math block. KaTeX's output includes MathML, and the raw LaTeX stays in its
+// <annotation encoding="application/x-tex"> for crawlers and LLMs.
+import "katex/dist/katex.min.css";
+import { readMathBlock } from "../block";
+import { renderMathHtml } from "../render";
+
+interface Props {
+	node: { _type: "math"; _key: string; latex?: string; display?: boolean };
+}
+
+const block = readMathBlock(Astro.props.node);
+const html = block ? renderMathHtml(block.latex, block.display) : "";
+---
+{block && (block.display
+	? <div class="emdash-math emdash-math--display" set:html={html} />
+	: <p class="emdash-math emdash-math--inline" set:html={html} />)}
