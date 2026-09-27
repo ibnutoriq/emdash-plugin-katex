@@ -18,7 +18,7 @@ export function renderMath(latex: string, display: boolean): MathCheck {
   }
 }
 
-const escapeHtml = (s: string) => s.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
+export const escapeHtml = (s: string) => s.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
 
 /**
  * Lenient render for the public site: a parse error shows in red in place (KaTeX's own
