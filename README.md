@@ -85,6 +85,8 @@ import { MathText } from "emdash-plugin-katex/astro";
 ```
 
 `\$` is a literal dollar sign. A formula KaTeX cannot parse shows in red in place.
+Element sizes are capped at 10em (`maxSize` option), so a `\rule{5000em}{5000em}` in a comment
+cannot cover the page; Math blocks written in the editor are not capped.
 
 ## Styling
 

@@ -4,7 +4,8 @@
 
 - `renderMathText(text, { formatText })`: renders `$…$` and `$$…$$` in plain text (comments,
   excerpts, any user-supplied text) on the server. The text is HTML-escaped, `\$` is a literal
-  dollar sign, and formulas use the same KaTeX options as Math blocks (`trust: false`).
+  dollar sign, and formulas use the same KaTeX options as Math blocks (`trust: false`). Element
+  sizes are capped at 10em by default (`maxSize`) so visitor text cannot draw a page-sized box.
 - `MathText` Astro component (`emdash-plugin-katex/astro`) wrapping it.
 
 ## 0.1.0
