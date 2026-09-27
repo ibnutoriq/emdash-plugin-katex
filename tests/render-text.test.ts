@@ -38,6 +38,17 @@ describe("renderMathText", () => {
     expect(renderMathText("coba $\\fracc{1}$ ya")).toContain("#cc0000");
   });
 
+  it("caps sizes so a visitor cannot draw a page-sized box", () => {
+    // The source text stays in the MathML annotation; the rendered box is capped.
+    const html = renderMathText("$\\rule{5000em}{5000em}$");
+    expect(html).not.toMatch(/(width|height)[:=]"?5000em/);
+    expect(html).toMatch(/width:10em/);
+  });
+
+  it("lets the caller change the size cap", () => {
+    expect(renderMathText("$\\rule{30em}{1em}$", { maxSize: 40 })).toContain("30em");
+  });
+
   it("passes plain text through formatText, never the math", () => {
     const html = renderMathText("a $x$ b", { formatText: (t) => `[${t}]` });
     expect(html.startsWith("[a ]")).toBe(true);

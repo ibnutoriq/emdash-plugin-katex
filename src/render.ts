@@ -24,9 +24,9 @@ export const escapeHtml = (s: string) => s.replace(/[&<>"']/g, (c) => `&#${c.cha
  * Lenient render for the public site: a parse error shows in red in place (KaTeX's own
  * behaviour); any other failure falls back to the escaped source, so a formula never breaks a page.
  */
-export function renderMathHtml(latex: string, display: boolean): string {
+export function renderMathHtml(latex: string, display: boolean, limits: { maxSize?: number } = {}): string {
   try {
-    return katex.renderToString(latex, { ...OPTIONS, displayMode: display, throwOnError: false });
+    return katex.renderToString(latex, { ...OPTIONS, ...limits, displayMode: display, throwOnError: false });
   } catch {
     return `<code class="emdash-math__source">${escapeHtml(latex)}</code>`;
   }
