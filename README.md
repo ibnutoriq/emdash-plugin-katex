@@ -59,6 +59,33 @@ import { mathBlockToMarkdown } from "emdash-plugin-katex";
 mathBlockToMarkdown(block); // "$$\\frac{a}{b}$$", "$x$", or null for an empty block
 ```
 
+## Math in plain text (comments, excerpts)
+
+Text that is not Portable Text, such as a comment body, can carry `$…$` and `$$…$$` too.
+`renderMathText` escapes the text and renders the formulas on the server with the same KaTeX
+options as Math blocks. User input cannot inject markup: the text is escaped, and KaTeX runs with
+`trust: false`, so `\href`, `\htmlId` and similar show as red source text.
+
+```ts
+import { renderMathText } from "emdash-plugin-katex";
+
+const html = renderMathText(comment.body, {
+  // Optional: runs on each run of already-escaped text, never on math.
+  formatText: (escaped) => escaped.replace(/\n/g, "<br>"),
+});
+```
+
+In Astro templates there is a component for it:
+
+```astro
+---
+import { MathText } from "emdash-plugin-katex/astro";
+---
+<MathText text={comment.body} />
+```
+
+`\$` is a literal dollar sign. A formula KaTeX cannot parse shows in red in place.
+
 ## Styling
 
 Blocks render inside `.emdash-math.emdash-math--display` (a `<div>`) or `.emdash-math.emdash-math--inline` (a `<p>`). KaTeX's CSS and fonts are bundled by your site's build; fonts load only when a formula needs them.

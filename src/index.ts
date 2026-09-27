@@ -5,6 +5,7 @@ import { publishRejection } from "./validate";
 export { readMathBlock, type MathBlockValue } from "./block";
 export { mathBlockToMarkdown } from "./markdown";
 export { findMathErrors, publishRejection, type MathError } from "./validate";
+export { renderMathText, type RenderMathTextOptions } from "./render-text";
 
 const ID = "plugin-katex";
 const VERSION = "0.1.0";

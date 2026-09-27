@@ -1,0 +1,16 @@
+---
+// Plain text with $…$ / $$…$$ (a comment, an excerpt), rendered on the server like Math blocks.
+import "katex/dist/katex.min.css";
+import { renderMathText } from "../render-text";
+
+interface Props {
+	text: string;
+	/** Wrapper element. Defaults to a div, since display math renders as a block. */
+	as?: "div" | "span" | "p";
+	class?: string;
+}
+
+const { text, as: Tag = "div", class: className } = Astro.props;
+const html = renderMathText(text);
+---
+<Tag class:list={["emdash-math-text", className]} set:html={html} />
